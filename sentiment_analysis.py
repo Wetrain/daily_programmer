@@ -4,8 +4,7 @@ import requests
 def get_comments(url):
     html = requests.get("https://plus.googleapis.com/u/0/_/widget/render/comments?first_party_property=YOUTUBE&href="+url)
     soup = bs4(html.text)
-    comments = [comment.string for comment in soup.findAll('div', class_='Ct')]
-    return comments
+    return  [comment.string for comment in soup.findAll('div', class_='Ct')]
 
 def negative_sentiment(comments):
     count = 0
