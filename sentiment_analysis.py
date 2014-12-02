@@ -2,11 +2,10 @@ from bs4 import BeautifulSoup as bs4
 import requests
 
 def get_comments(url):
-    if(url):
-        html = requests.get("https://plus.googleapis.com/u/0/_/widget/render/comments?first_party_property=YOUTUBE&href="+url)
-        soup = bs4(html.text)
-        comments = [comment.string for comment in soup.findAll('div', class_='Ct')]
-        return comments
+    html = requests.get("https://plus.googleapis.com/u/0/_/widget/render/comments?first_party_property=YOUTUBE&href="+url)
+    soup = bs4(html.text)
+    comments = [comment.string for comment in soup.findAll('div', class_='Ct')]
+    return comments
 
 def negative_sentiment(comments):
     count = 0
@@ -32,26 +31,24 @@ def positive_sentiment(comments):
                     count += 1
     return count
 
-
 def main():    
     url = raw_input("enter youtube url \n")
+
     if(url):
         comments = get_comments(url)
         positive_score = positive_sentiment(comments)
         negative_score = negative_sentiment(comments)
-
         total_score = positive_score + negative_score
 
         if(positive_score > negative_score):
             print("This video is generally positive {0} positive / {1} total hits").format(positive_score, total_score)
-
         elif(negative_score > positive_score):
             print("This video is generally negative {0} negative / {1} total hits").format(negative_score, total_score)
-
         else:
-            print("This video is mutual {0} positive {1} negative").format(positive_sentiment, negative_sentiment)
+            print("This video is mutual {0} positive {1} negative").format(positive_score, negative_score)
     else:
         print("No url supplied")
+
 
 if __name__ == "__main__":
     main()    
